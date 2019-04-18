@@ -98,6 +98,8 @@ module.exports = {
     // }
   },
 
+  // publicPath: process.env.NODE_ENV === 'production' ? '/dist/' : '/',
+
   // disable source map in production
   productionSourceMap: false,
   lintOnSave: undefined,
