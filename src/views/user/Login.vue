@@ -194,7 +194,7 @@ export default {
             .then((res) => {
               if (res.code === 200) {
                 this.loginSuccess(res)
-              }else {
+              } else {
                 this.loginFailed(res)
               }
             })
