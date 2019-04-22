@@ -1,6 +1,5 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { bxAnaalyse } from '@/core/icons'
 
 export const asyncRouterMap = [
 
@@ -9,23 +8,14 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard',
+    redirect: '/index',
     children: [
       // dashboard
       {
-        path: '/dashboard',
-        name: 'dashboard',
-        redirect: '/dashboard/analysis',
-        component: RouteView,
-        meta: { title: '仪表盘', keepAlive: true, icon: bxAnaalyse },
-        children: [
-          {
-            path: '/dashboard/analysis',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '分析页', keepAlive: false }
-          }
-        ]
+        path: '/index',
+        name: 'index',
+        component: () => import('@/views/index/Index'),
+        meta: { title: '首页', keepAlive: true, icon: 'home' }
       },
 
       // forms
@@ -195,6 +185,22 @@ export const asyncRouterMap = [
                 meta: { title: '新消息通知', hidden: true, keepAlive: true }
               }
             ]
+          }
+        ]
+      },
+
+      {
+        path: '/user',
+        name: 'user',
+        component: PageView,
+        redirect: '/user/list',
+        meta: { title: '管理员', icon: 'bars' },
+        children: [
+          {
+            path: '/user/list',
+            name: 'UserList',
+            component: () => import('@/views/user/List'),
+            meta: { title: '列表' }
           }
         ]
       }
