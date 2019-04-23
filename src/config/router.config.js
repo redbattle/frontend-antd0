@@ -218,15 +218,15 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
-    path: '/user',
+    path: '/public',
     component: UserLayout,
-    redirect: '/user/login',
+    redirect: '/public/login',
     hidden: true,
     children: [
       {
         path: 'login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
+        component: () => import(/* webpackChunkName: "user" */ '@/views/public/Login')
       }
     ]
   },

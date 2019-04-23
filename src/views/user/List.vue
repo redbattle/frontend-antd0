@@ -2,8 +2,7 @@
   <a-card :bordered="false">
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.createModal.add()">新建</a-button>
-      <a-button type="dashed" >alert</a-button>
+      <a-button type="primary" icon="plus" @click="$refs.saveModal.add()">新建</a-button>
     </div>
 
     <s-table
@@ -21,13 +20,10 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <template>
-          <a @click="handleEdit(record)">配置</a>
-          <a-divider type="vertical" />
-          <a @click="handleSub(record)">订阅报警</a>
-        </template>
+        <a @click="handleEdit(record)">编辑</a>
       </span>
     </s-table>
+    <save-form ref="saveModal" @ok="handleOk" />
   </a-card>
 </template>
 
@@ -35,6 +31,7 @@
 import moment from 'moment'
 import { STable } from '@/components'
 import { getRoleList, getServiceList } from '@/api/manage'
+import saveForm from './Form'
 
 const statusMap = {
   0: {
@@ -58,15 +55,11 @@ const statusMap = {
 export default {
   name: 'TableList',
   components: {
+    saveForm,
     STable
   },
   data () {
     return {
-      mdl: {},
-      // 高级搜索 展开/关闭
-      advanced: false,
-      // 查询参数
-      queryParam: {},
       // 表头
       columns: [
         {
@@ -121,36 +114,14 @@ export default {
       return statusMap[type].status
     }
   },
-  created () {
-    getRoleList({ t: new Date() })
-  },
   methods: {
-
     handleEdit (record) {
       console.log(record)
-      this.$refs.modal.edit(record)
-    },
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
+      record.form_title = '编辑'
+      this.$refs.saveModal.edit(record)
     },
     handleOk () {
       this.$refs.table.refresh()
-    },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
-    },
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
-      }
     }
   }
 }
