@@ -28,9 +28,8 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { STable } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
+import { getUserList } from '@/api/manage'
 import saveForm from './Form'
 
 const statusMap = {
@@ -87,7 +86,7 @@ export default {
         },
         {
           title: '更新时间',
-          dataIndex: 'updatedAt',
+          dataIndex: 'updatedAt'
         },
         {
           title: '操作',
@@ -99,7 +98,7 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getServiceList(Object.assign(parameter, this.queryParam))
+        return getUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
             return res.result
           })

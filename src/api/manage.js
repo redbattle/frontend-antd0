@@ -8,15 +8,7 @@ const api = {
 
 export default api
 
-export function getRoleList (parameter) {
-  return axios({
-    url: api.role,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getServiceList (parameter) {
+export function getUserList (parameter) {
   return axios({
     url: api.service,
     method: 'get',
