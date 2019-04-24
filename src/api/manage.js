@@ -1,17 +1,15 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  role: '/role',
-  service: '/service',
-  orgTree: '/org/tree'
+  get_a_user_list: 'http://127.0.0.1:8002/admin/a_user/list'
 }
 
 export default api
 
-export function getUserList (parameter) {
+export function getAUserList (parameter) {
   return axios({
-    url: api.service,
-    method: 'get',
+    url: api.get_a_user_list,
+    method: 'post',
     params: parameter
   })
 }

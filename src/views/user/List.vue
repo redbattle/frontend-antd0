@@ -8,13 +8,9 @@
     <s-table
       ref="table"
       size="default"
-      rowKey="key"
       :columns="columns"
       :data="loadData"
     >
-      <span slot="serial" slot-scope="text, record, index">
-        {{ index + 1 }}
-      </span>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -29,25 +25,17 @@
 
 <script>
 import { STable } from '@/components'
-import { getUserList } from '@/api/manage'
+import { getAUserList } from '@/api/manage'
 import saveForm from './Form'
 
 const statusMap = {
   0: {
-    status: 'default',
-    text: '关闭'
+    status: 'error',
+    text: '禁用'
   },
   1: {
-    status: 'processing',
-    text: '运行中'
-  },
-  2: {
     status: 'success',
-    text: '已上线'
-  },
-  3: {
-    status: 'error',
-    text: '异常'
+    text: '启用'
   }
 }
 
@@ -62,31 +50,21 @@ export default {
       // 表头
       columns: [
         {
-          title: '#',
-          scopedSlots: { customRender: 'serial' }
+          title: 'ID',
+          dataIndex: 'id'
         },
         {
-          title: '规则编号',
-          dataIndex: 'no'
+          title: '昵称',
+          dataIndex: 'nickname'
         },
         {
-          title: '描述',
-          dataIndex: 'description'
-        },
-        {
-          title: '服务调用次数',
-          dataIndex: 'callNo',
-          needTotal: true,
-          customRender: (text) => text + ' 次'
+          title: '用户名',
+          dataIndex: 'username'
         },
         {
           title: '状态',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' }
-        },
-        {
-          title: '更新时间',
-          dataIndex: 'updatedAt'
         },
         {
           title: '操作',
@@ -98,9 +76,25 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         console.log('loadData.parameter', parameter)
-        return getUserList(Object.assign(parameter, this.queryParam))
+        return getAUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
-            return res.result
+            if (res.code === 200) {
+              let result = res.data.lists
+              console.log(result)
+              return {
+                data: result.data,
+                pageNo: result.current_page,
+                pageSize: result.per_page,
+                totalCount: result.total,
+                totalPage: result.last_page,
+              }
+            } else {
+              this.$notification['error']({
+                message: '获取失败',
+                description: res.msg,
+                duration: 4
+              })
+            }
           })
       }
     }

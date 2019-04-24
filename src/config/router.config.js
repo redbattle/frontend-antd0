@@ -10,7 +10,6 @@ export const asyncRouterMap = [
     meta: { title: '首页' },
     redirect: '/index',
     children: [
-      // dashboard
       {
         path: '/index',
         name: 'index',
