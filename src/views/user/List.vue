@@ -27,6 +27,7 @@
 import { STable } from '@/components'
 import { getAUserList } from '@/api/manage'
 import saveForm from './Form'
+import store from '@/store'
 
 const statusMap = {
   0: {
@@ -40,7 +41,6 @@ const statusMap = {
 }
 
 export default {
-  name: 'TableList',
   components: {
     saveForm,
     STable
@@ -75,12 +75,10 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        console.log('loadData.parameter', parameter)
         return getAUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
             if (res.code === 200) {
               let result = res.data.lists
-              console.log(result)
               return {
                 data: result.data,
                 pageNo: result.current_page,
@@ -89,11 +87,17 @@ export default {
                 totalPage: result.last_page,
               }
             } else {
-              this.$notification['error']({
-                message: '获取失败',
-                description: res.msg,
-                duration: 4
-              })
+              if (res.err_code === 'invalid_token'){
+                store.dispatch('Logout').then(() => {
+                  this.$router.push({name:'login'})
+                })
+              } else {
+                this.$notification['error']({
+                  message: '获取失败',
+                  description: res.msg,
+                  duration: 4
+                })
+              }
             }
           })
       }
