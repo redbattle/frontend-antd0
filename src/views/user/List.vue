@@ -29,16 +29,7 @@ import { getAUserList } from '@/api/manage'
 import saveForm from './Form'
 import store from '@/store'
 
-const statusMap = {
-  0: {
-    status: 'error',
-    text: '禁用'
-  },
-  1: {
-    status: 'success',
-    text: '启用'
-  }
-}
+const statusMap = {}
 
 export default {
   components: {
@@ -78,6 +69,12 @@ export default {
         return getAUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
             if (res.code === 200) {
+              for(let i in res.data.status_lists){
+                statusMap[i] = {
+                  status: i <= 0 ? 'error' : 'success',
+                  text: res.data.status_lists[i]
+                }
+              }
               let result = res.data.lists
               return {
                 data: result.data,
