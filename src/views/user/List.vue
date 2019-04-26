@@ -2,7 +2,7 @@
   <a-card :bordered="false">
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.saveModal.add()">新建</a-button>
+      <a-button type="primary" icon="plus" @click="handleCreate()">新建</a-button>
     </div>
 
     <s-table
@@ -29,7 +29,7 @@ import { getAUserList } from '@/api/manage'
 import saveForm from './Form'
 import store from '@/store'
 
-const statusMap = {}
+let statusMap = {}
 
 export default {
   components: {
@@ -83,18 +83,6 @@ export default {
                 totalCount: result.total,
                 totalPage: result.last_page,
               }
-            } else {
-              if (res.err_code === 'invalid_token'){
-                store.dispatch('Logout').then(() => {
-                  this.$router.push({name:'login'})
-                })
-              } else {
-                this.$notification['error']({
-                  message: '获取失败',
-                  description: res.msg,
-                  duration: 4
-                })
-              }
             }
           })
       }
@@ -109,10 +97,11 @@ export default {
     }
   },
   methods: {
+    handleCreate () {
+      this.$refs.saveModal.add(statusMap)
+    },
     handleEdit (record) {
-      console.log(record)
-      record.form_title = '编辑'
-      this.$refs.saveModal.edit(record)
+      this.$refs.saveModal.edit(record, statusMap)
     },
     handleOk () {
       this.$refs.table.refresh()

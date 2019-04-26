@@ -1,15 +1,24 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  get_a_user_list: 'http://127.0.0.1:8002/admin/a_user/list'
+  a_user_list: 'http://127.0.0.1:8002/admin/a_user/list',
+  a_user_save: 'http://127.0.0.1:8002/admin/a_user/save'
 }
 
 export default api
 
-export function getAUserList (parameter) {
+function axiosPost (url, params) {
   return axios({
-    url: api.get_a_user_list,
+    url: url,
     method: 'post',
-    params: parameter
+    params: params
   })
+}
+
+export function getAUserList (parameter) {
+  return axiosPost(api.a_user_list, parameter)
+}
+
+export function getAUserSave (parameter) {
+  return axiosPost(api.a_user_save, parameter)
 }

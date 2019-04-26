@@ -10,18 +10,34 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item
+          label="昵称"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input v-decorator="['nickname', {initialValue: params.nickname, rules: [{required: true, max:30, message: '必填且不超过30字符'}]}]" placeholder="必填且不超过30字符"/>
+        </a-form-item>
+        <a-form-item
           label="用户名"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['username', {rules: [{required: true, message: '请输入用户名'}]}]" />
+          <a-input v-decorator="['username', {initialValue: params.username, rules: [{required: true, max:50, message: '必填且不超过50字符的字母数字下划线'}]}]" placeholder="必填且不超过50字符的字母数字下划线"/>
         </a-form-item>
         <a-form-item
           label="密码"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['password']" type="password" />
+          <a-input v-decorator="['password', {initialValue: ''}]" type="password" placeholder="编辑时，若不修改则留空"/>
+        </a-form-item>
+        <a-form-item
+          label="状态"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-radio-group v-decorator="['status', {initialValue: params.status+'', rules: [{required: true, message: '必填'}]}]">
+            <a-radio v-for="(value, key) in statusMap" :value="key">{{value.text}}</a-radio>
+          </a-radio-group>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -29,6 +45,8 @@
 </template>
 
 <script>
+import { getAUserSave } from '@/api/manage'
+import md5 from 'md5'
 export default {
   data () {
     return {
@@ -43,29 +61,47 @@ export default {
       visible: false,
       confirmLoading: false,
       form: this.$form.createForm(this),
-      title:''
+      title:'',
+      statusMap:{},
+      params:{},
     }
   },
   methods: {
-    add () {
+    add (statusMap) {
+      this.form.resetFields()
       this.visible = true
       this.title = '新建'
+      this.statusMap = statusMap
+      this.params = {
+        id: '',
+        nickname: '',
+        username: '',
+        status: '1',
+      }
     },
-    edit (params) {
+    edit (params, statusMap) {
+      this.form.resetFields()
       this.visible = true
-      this.title = params.form_title
+      this.title = '编辑'
+      this.params = params
+      this.statusMap = statusMap
     },
     handleSubmit () {
-      const { form: { validateFields } } = this
+      const { form: { validateFields }, Login } = this
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {
-          console.log('values', values)
-          setTimeout(() => {
-            this.visible = false
-            this.confirmLoading = false
-            this.$emit('ok', values)
-          }, 1500)
+          values.id = this.params.id
+          values.password = md5(values.password)
+          getAUserSave(values)
+            .then(res => {
+              if (res.code === 200) {
+                this.visible = false
+                this.confirmLoading = false
+                this.$emit('ok', values)
+              }
+              this.confirmLoading = false
+            })
         } else {
           this.confirmLoading = false
         }
