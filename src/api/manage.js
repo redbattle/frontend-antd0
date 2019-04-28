@@ -2,7 +2,7 @@ import { axios } from '@/utils/request'
 
 const api = {
   login: 'http://127.0.0.1:8002/admin/login',
-  logout: '/auth/logout',
+  logout: 'http://127.0.0.1:8002/admin/a_user/logout',
   get_info: 'http://127.0.0.1:8002/admin/a_user/info',
   a_user_list: 'http://127.0.0.1:8002/admin/a_user/list',
   a_user_save: 'http://127.0.0.1:8002/admin/a_user/save'
