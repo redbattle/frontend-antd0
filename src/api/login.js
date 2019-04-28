@@ -22,7 +22,7 @@ export function login (parameter) {
 export function getInfo () {
   return axios({
     url: '/user/info',
-    method: 'get',
+    method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }

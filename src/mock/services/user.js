@@ -70,4 +70,4 @@ const info = (options) => {
   return builder(userInfo)
 }
 
-Mock.mock(/\/api\/user\/info/, 'get', info)
+Mock.mock(/\/api\/user\/info/, 'post', info)
