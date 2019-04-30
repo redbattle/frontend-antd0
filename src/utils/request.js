@@ -55,17 +55,17 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use((response) => {
   if (response.data.code === 0) {
     // todo
-    // if (response.data.err_code === 'invalid_token') {
-    //   store.dispatch('Logout').then(() => {
-    //     this.$router.push({ name: 'login' })
-    //   })
-    // } else {
-    //   this.$notification['error']({
-    //     message: '失败',
-    //     description: response.data.msg,
-    //     duration: 4
-    //   })
-    // }
+    if (response.data.err_code === 'invalid_token') {
+      store.dispatch('Logout').then(() => {
+        this.$router.push({ name: 'login' })
+      })
+    } else {
+      this.$notification['error']({
+        message: '失败',
+        description: response.data.msg,
+        duration: 4
+      })
+    }
   }
   return response.data
 }, err)
