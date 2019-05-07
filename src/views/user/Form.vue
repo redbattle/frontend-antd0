@@ -36,7 +36,7 @@
           :wrapperCol="wrapperCol"
         >
           <a-radio-group v-decorator="['status', {initialValue: params.status+'', rules: [{required: true, message: '必填'}]}]">
-            <a-radio v-for="(value, key) in statusMap" :value="key">{{value.text}}</a-radio>
+            <a-radio v-for="(value, key) in statusMap" :key="key" :value="key">{{ value.text }}</a-radio>
           </a-radio-group>
         </a-form-item>
       </a-form>
@@ -61,9 +61,9 @@ export default {
       visible: false,
       confirmLoading: false,
       form: this.$form.createForm(this),
-      title:'',
-      statusMap:{},
-      params:{},
+      title: '',
+      statusMap: {},
+      params: {}
     }
   },
   methods: {
@@ -76,7 +76,7 @@ export default {
         id: '',
         nickname: '',
         username: '',
-        status: '1',
+        status: '1'
       }
     },
     edit (params, statusMap) {
@@ -87,7 +87,7 @@ export default {
       this.statusMap = statusMap
     },
     handleSubmit () {
-      const { form: { validateFields }, Login } = this
+      const { form: { validateFields } } = this
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {

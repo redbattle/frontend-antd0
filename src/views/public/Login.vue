@@ -74,7 +74,7 @@ export default {
       form: this.$form.createForm(this),
       state: {
         time: 60,
-        loginBtn: false,
+        loginBtn: false
       }
     }
   },

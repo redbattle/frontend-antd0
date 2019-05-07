@@ -27,9 +27,8 @@
 import { STable } from '@/components'
 import { getAUserList } from '@/api/manage'
 import saveForm from './Form'
-import store from '@/store'
 
-let statusMap = {}
+const statusMap = {}
 
 export default {
   components: {
@@ -69,19 +68,19 @@ export default {
         return getAUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
             if (res.code === 200) {
-              for(let i in res.data.status_lists){
+              for (const i in res.data.status_lists) {
                 statusMap[i] = {
                   status: i <= 0 ? 'error' : 'success',
                   text: res.data.status_lists[i]
                 }
               }
-              let result = res.data.lists
+              const result = res.data.lists
               return {
                 data: result.data,
                 pageNo: result.current_page,
                 pageSize: result.per_page,
                 totalCount: result.total,
-                totalPage: result.last_page,
+                totalPage: result.last_page
               }
             }
           })
