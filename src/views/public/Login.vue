@@ -12,15 +12,15 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" tab="账号密码登录">
+        <a-tab-pane key="tab1" tab="登录">
           <a-form-item>
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="用户"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入用户名' }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -32,7 +32,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="密码"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -99,18 +99,14 @@ export default {
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           const loginParams = { ...values }
-          console.log(loginParams)
           loginParams.username = values.username
           loginParams.password = md5(values.password)
           Login(loginParams)
             .then((res) => {
               if (res.code === 200) {
                 this.loginSuccess(res)
-              } else {
-                this.loginFailed(res)
               }
             })
-            .catch(err => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false
             })
@@ -131,21 +127,6 @@ export default {
           description: `${timeFix()}，欢迎回来`
         })
       }, 1000)
-    },
-    loginFailed (res) {
-      console.log(res)
-      this.$notification['error']({
-        message: '登录失败',
-        description: res.msg,
-        duration: 4
-      })
-    },
-    requestFailed (err) {
-      this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-        duration: 4
-      })
     }
   }
 }

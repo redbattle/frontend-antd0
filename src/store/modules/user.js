@@ -22,7 +22,7 @@ const user = {
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
-    },
+    }
   },
 
   actions: {
