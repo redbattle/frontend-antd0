@@ -1,11 +1,13 @@
 import { axios } from '@/utils/request'
-
+const url = 'http://127.0.0.1:8002/admin'
 const api = {
-  login: 'http://127.0.0.1:8002/admin/login',
-  logout: 'http://127.0.0.1:8002/admin/a_user/logout',
-  get_info: 'http://127.0.0.1:8002/admin/a_user/info',
-  a_user_list: 'http://127.0.0.1:8002/admin/a_user/list',
-  a_user_save: 'http://127.0.0.1:8002/admin/a_user/save'
+  get_info: url + '/a_user/info',
+  a_user_list: url + '/a_user/list',
+  a_user_save: url + '/a_user/save',
+  c_user_list: url + '/c_user/list',
+  c_user_save: url + '/c_user/save',
+  login: url + '/login',
+  logout: url + '/a_user/logout'
 }
 
 function axiosPost (url, params = {}) {
@@ -34,4 +36,12 @@ export function getInfo () {
 
 export function logout () {
   return axiosPost(api.logout)
+}
+
+export function getCUserList (parameter) {
+  return axiosPost(api.c_user_list, parameter)
+}
+
+export function getCUserSave (parameter) {
+  return axiosPost(api.c_user_save, parameter)
 }

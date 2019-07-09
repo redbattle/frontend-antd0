@@ -47,16 +47,16 @@ export const asyncRouterMap = [
       },
 
       {
-        path: '/user',
-        name: 'user',
+        path: '/a_user',
+        name: 'a_user',
         component: PageView,
-        redirect: '/user/list',
+        redirect: '/a_user/list',
         meta: { title: '管理员', icon: 'bars' },
         children: [
           {
-            path: '/user/list',
+            path: '/a_user/list',
             name: 'UserList',
-            component: () => import('@/views/user/List'),
+            component: () => import('@/views/a_user/List'),
             meta: { title: '列表' }
           }
         ]
