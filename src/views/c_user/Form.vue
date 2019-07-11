@@ -73,19 +73,6 @@ export default {
     }
   },
   methods: {
-    add (statusMap) {
-      this.form.resetFields()
-      this.visible = true
-      this.title = '新建'
-      this.statusMap = statusMap
-      this.params = {
-        id: '',
-        nickname: '',
-        phone: '',
-        email: '',
-        status: '1'
-      }
-    },
     edit (params, statusMap) {
       this.form.resetFields()
       this.visible = true
