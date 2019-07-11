@@ -17,11 +17,18 @@
           <a-input v-decorator="['nickname', {initialValue: params.nickname, rules: [{required: true, max:30, message: '必填且不超过30字符'}]}]" placeholder="必填且不超过30字符"/>
         </a-form-item>
         <a-form-item
-          label="用户名"
+          label="手机号"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['username', {initialValue: params.username, rules: [{required: true, max:50, message: '必填且不超过50字符的字母数字下划线'}]}]" placeholder="必填且不超过50字符的字母数字下划线"/>
+          <a-input v-decorator="['phone', {initialValue: params.phone, rules: [{required: true, max:60, message: '必填且不超过60字符'}]}]" placeholder="必填且不超过60字符"/>
+        </a-form-item>
+        <a-form-item
+          label="邮箱"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+        >
+          <a-input v-decorator="['email', {initialValue: params.email, rules: [{max:60, message: '不超过60字符'}]}]" placeholder="不超过60字符"/>
         </a-form-item>
         <a-form-item
           label="密码"
@@ -45,7 +52,7 @@
 </template>
 
 <script>
-import { getAUserSave } from '@/api/manage'
+import { getCUserSave } from '@/api/manage'
 export default {
   data () {
     return {
@@ -74,7 +81,8 @@ export default {
       this.params = {
         id: '',
         nickname: '',
-        username: '',
+        phone: '',
+        email: '',
         status: '1'
       }
     },
@@ -91,7 +99,7 @@ export default {
       validateFields((errors, values) => {
         if (!errors) {
           values.id = this.params.id
-          getAUserSave(values)
+          getCUserSave(values)
             .then(res => {
               if (res.code === 200) {
                 this.visible = false

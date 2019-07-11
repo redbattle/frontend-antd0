@@ -55,8 +55,24 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/a_user/list',
-            name: 'UserList',
+            name: 'a_user_list',
             component: () => import('@/views/a_user/List'),
+            meta: { title: '列表' }
+          }
+        ]
+      },
+
+      {
+        path: '/c_user',
+        name: 'c_user',
+        component: PageView,
+        redirect: '/c_user/list',
+        meta: { title: '用户', icon: 'bars' },
+        children: [
+          {
+            path: '/c_user/list',
+            name: 'c_user_list',
+            component: () => import('@/views/c_user/List'),
             meta: { title: '列表' }
           }
         ]
@@ -83,7 +99,7 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/public/Login')
+        component: () => import('@/views/public/Login')
       }
     ]
   },
@@ -103,7 +119,7 @@ export const constantRouterMap = [
 
   {
     path: '/404',
-    component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
+    component: () => import('@/views/exception/404')
   }
 
 ]

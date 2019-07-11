@@ -5,7 +5,7 @@ const api = {
   a_user_list: url + '/a_user/list',
   a_user_save: url + '/a_user/save',
   c_user_list: url + '/c_user/list',
-  c_user_save: url + '/c_user/save',
+  c_user_save: url + '/c_user/update',
   login: url + '/login',
   logout: url + '/a_user/logout'
 }
