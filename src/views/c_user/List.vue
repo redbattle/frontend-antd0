@@ -1,10 +1,5 @@
 <template>
   <a-card :bordered="false">
-
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleCreate()">新建</a-button>
-    </div>
-
     <s-table
       ref="table"
       size="default"
