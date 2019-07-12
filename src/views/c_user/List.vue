@@ -12,7 +12,7 @@
             <a-form-item label="状态">
               <a-select v-model="queryParam.status" placeholder="请选择" default-value="">
                 <a-select-option value="">全部</a-select-option>
-                <a-select-option v-for="value in statusLists" :value="value.key">{{ value.value }}</a-select-option>
+                <a-select-option v-for="(item, key) in statusLists" :key="key" :value="item.key">{{ item.value }}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -94,12 +94,12 @@ export default {
         return getCUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
             if (res.code === 200) {
-              for (const i in res.data.status_lists) {
-                statusMap[i] = {
-                  status: res.data.status_lists[i].key <= 0 ? 'error' : 'success',
-                  text: res.data.status_lists[i].value
+              this.statusLists = res.data.status_lists
+              for (const i in this.statusLists) {
+                statusMap[this.statusLists[i].key] = {
+                  status: this.statusLists[i].key <= 0 ? 'error' : 'success',
+                  text: this.statusLists[i].value
                 }
-                this.statusLists = res.data.status_lists
               }
               const result = res.data.lists
               return {
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     handleEdit (record) {
-      this.$refs.saveModal.edit(record, statusMap)
+      this.$refs.saveModal.edit(record, this.statusLists)
     },
     handleOk () {
       this.$refs.table.refresh()
