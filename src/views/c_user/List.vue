@@ -31,10 +31,12 @@
       :columns="columns"
       :data="loadData"
     >
+      <span slot="serial" slot-scope="text, record, index">
+        {{ index + 1 }}
+      </span>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
-
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
       </span>
@@ -61,6 +63,10 @@ export default {
       statusLists: {},
       // 表头
       columns: [
+        {
+          title: '#',
+          scopedSlots: { customRender: 'serial' }
+        },
         {
           title: 'ID',
           dataIndex: 'id'
