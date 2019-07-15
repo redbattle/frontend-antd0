@@ -1,5 +1,12 @@
 import { axios } from '@/utils/request'
-const url = 'http://127.0.0.1:8002/admin'
+let url
+if (process.env.NODE_ENV === 'production') {
+  // 线上
+  url = 'http://cpbtest.rasp.isnows.xin:8081/admin'
+} else if (process.env.NODE_ENV === 'development') {
+  // 本地
+  url = 'http://127.0.0.1:8002/admin'
+}
 const api = {
   get_info: url + '/a_user/info',
   a_user_list: url + '/a_user/list',
@@ -27,6 +34,7 @@ export function getAUserSave (parameter) {
 }
 
 export function login (parameter) {
+  console.log(process.env.NODE_ENV)
   return axiosPost(api.login, parameter)
 }
 
