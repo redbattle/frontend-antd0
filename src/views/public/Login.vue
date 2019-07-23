@@ -118,7 +118,6 @@ export default {
       })
     },
     loginSuccess (res) {
-      console.log(res)
       this.$router.push({ name: 'index' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
