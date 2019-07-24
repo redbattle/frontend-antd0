@@ -18,3 +18,23 @@ Vue.filter('dayjs', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 Vue.filter('moment', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
   return moment(dataStr).format(pattern)
 })
+
+export function tableTextFilter (key, map) {
+  let text = ''
+  for (const i in map) {
+    if (key === map[i].key) {
+      text = map[i].text
+    }
+  }
+  return text
+}
+
+export function tableStatusFilter (key, map) {
+  let status = ''
+  for (const i in map) {
+    if (key === map[i].key) {
+      status = map[i].status
+    }
+  }
+  return status
+}

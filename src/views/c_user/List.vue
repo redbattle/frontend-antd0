@@ -12,7 +12,7 @@
             <a-form-item label="状态">
               <a-select v-model="queryParam.status" placeholder="请选择" default-value="">
                 <a-select-option value="">全部</a-select-option>
-                <a-select-option v-for="(item, key) in statusLists" :key="key" :value="item.key">{{ item.value }}</a-select-option>
+                <a-select-option v-for="(item, key) in statusMap" :key="key" :value="item.key">{{ item.value }}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -46,8 +46,9 @@
 import { STable } from '@/components'
 import { getCUserList } from '@/api/manage'
 import saveForm from './Form'
+import { tableTextFilter, tableStatusFilter } from '@/utils/filter'
 
-const statusMap = {}
+let statusMap = {}
 
 export default {
   components: {
@@ -57,7 +58,6 @@ export default {
   data () {
     return {
       queryParam: {},
-      statusLists: {},
       // 表头
       columns: [
         {
@@ -93,13 +93,7 @@ export default {
         return getCUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
             if (res.code === 200) {
-              this.statusLists = res.data.status_lists
-              for (const i in this.statusLists) {
-                statusMap[this.statusLists[i].key] = {
-                  status: this.statusLists[i].key <= 0 ? 'error' : 'success',
-                  text: this.statusLists[i].value
-                }
-              }
+              statusMap = res.data.status_lists
               const result = res.data.lists
               return {
                 data: result.data,
@@ -114,16 +108,16 @@ export default {
     }
   },
   filters: {
-    statusFilter (type) {
-      return statusMap[type].text
+    statusFilter (key) {
+      return tableTextFilter(key, statusMap)
     },
-    statusTypeFilter (type) {
-      return statusMap[type].status
+    statusTypeFilter (key) {
+      return tableStatusFilter(key, statusMap)
     }
   },
   methods: {
     handleEdit (record) {
-      this.$refs.saveModal.edit(record, this.statusLists)
+      this.$refs.saveModal.edit(record, statusMap)
     },
     handleOk () {
       this.$refs.table.refresh()

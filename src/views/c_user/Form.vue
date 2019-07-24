@@ -43,7 +43,7 @@
           :wrapperCol="wrapperCol"
         >
           <a-radio-group v-decorator="['status', {initialValue: params.status, rules: [{required: true, message: '必填'}]}]">
-            <a-radio v-for="(item, key) in statusMap" :key="key" :value="item.key">{{ item.value }}</a-radio>
+            <a-radio v-for="(item, key) in statusMap" :key="key" :value="item.key">{{ item.text }}</a-radio>
           </a-radio-group>
         </a-form-item>
       </a-form>

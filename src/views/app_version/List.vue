@@ -55,6 +55,7 @@
 import { STable } from '@/components'
 import { getAppVersionList } from '@/api/manage'
 import saveForm from './Form'
+import { tableTextFilter, tableStatusFilter } from '@/utils/filter'
 
 let tipsMap = {}
 let clientMap = {}
@@ -128,40 +129,16 @@ export default {
   },
   filters: {
     tipsTextFilter (key) {
-      let text = ''
-      for (const i in tipsMap) {
-        if (key === tipsMap[i].key) {
-          text = tipsMap[i].text
-        }
-      }
-      return text
+      return tableTextFilter(key, tipsMap)
     },
     tipsStatusFilter (key) {
-      let status = ''
-      for (const i in tipsMap) {
-        if (key === tipsMap[i].key) {
-          status = tipsMap[i].status
-        }
-      }
-      return status
-    },
-    clientStatusFilter (key) {
-      let status = ''
-      for (const i in clientMap) {
-        if (key === clientMap[i].key) {
-          status = clientMap[i].status
-        }
-      }
-      return status
+      return tableStatusFilter(key, tipsMap)
     },
     clientTextFilter (key) {
-      let status = ''
-      for (const i in clientMap) {
-        if (key === clientMap[i].key) {
-          status = clientMap[i].text
-        }
-      }
-      return status
+      return tableTextFilter(key, clientMap)
+    },
+    clientStatusFilter (key) {
+      return tableStatusFilter(key, clientMap)
     }
   },
   methods: {
