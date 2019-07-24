@@ -14,7 +14,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-select v-decorator="['client', {initialValue: params.client, rules: [{required: true, message: '必填'}]}]" placeholder="请选择" default-value="">
+          <a-select v-decorator="['client', {initialValue: params.client, rules: [{required: true, message: '必填'}]}]" @change="changeClient" placeholder="请选择" default-value="">
             <a-select-option v-for="(item, key) in clientMap" :key="key" :value="item.key">{{ item.text }}</a-select-option>
           </a-select>
         </a-form-item>
@@ -53,14 +53,14 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['link', {initialValue: params.link, rules: [{required: true, message: '必填'}]}]" placeholder="必填"/>
+          <a-input v-decorator="['link', {initialValue: params.link, rules: [{required: true, message: '必填'}]}]" :disabled="appInfoDisabled" placeholder="必填"/>
         </a-form-item>
         <a-form-item
           label="安装包大小"
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
         >
-          <a-input v-decorator="['size', {initialValue: params.size, rules: [{required: true, max:20, message: '必填且不超过20字符'}]}]" placeholder="必填且不超过20字符"/>
+          <a-input v-decorator="['size', {initialValue: params.size, rules: [{required: true, max:20, message: '必填且不超过20字符'}]}]" :disabled="appInfoDisabled" placeholder="必填且不超过20字符"/>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -82,6 +82,7 @@ export default {
       },
       visible: false,
       confirmLoading: false,
+      appInfoDisabled: false,
       form: this.$form.createForm(this),
       title: '',
       tipsMap: {},
@@ -113,6 +114,10 @@ export default {
       this.params = params
       this.tipsMap = tipsMap
       this.clientMap = clientMap
+      this.appInfoDisabled = params.client === 'android'
+    },
+    changeClient (field) {
+      this.appInfoDisabled = field === 'android'
     },
     handleSubmit () {
       const { form: { validateFields } } = this
