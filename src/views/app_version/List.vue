@@ -4,16 +4,13 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
-            <a-form-item label="账号名">
-              <a-input v-model="queryParam.username" placeholder="账号名"/>
+            <a-form-item label="版本名称">
+              <a-input v-model="queryParam.name" placeholder="版本名称"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
-            <a-form-item label="状态">
-              <a-select v-model="queryParam.status" placeholder="请选择" default-value="">
-                <a-select-option value="">全部</a-select-option>
-                <a-select-option v-for="(item, key) in statusLists" :key="key" :value="item.key">{{ item.value }}</a-select-option>
-              </a-select>
+            <a-form-item label="强更版本">
+              <a-input v-model="queryParam.code" placeholder="强更版本"/>
             </a-form-item>
           </a-col>
           <a-col :md="24" :sm="24">
@@ -35,12 +32,20 @@
       :columns="columns"
       :data="loadData"
     >
-      <span slot="status" slot-scope="text">
-        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+      <span slot="is_tips" slot-scope="key">
+        <a-badge :status="key | tipsStatusFilter" :text="key | tipsTextFilter" />
+      </span>
+      <span slot="client" slot-scope="key">
+        <a-icon :type="key | clientStatusFilter"/>
+        {{key | clientTextFilter}}
       </span>
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
       </span>
+      <p slot="expandedRowRender" slot-scope="record" style="margin: 0">
+        安装包：<a :href="record.link">{{record.link}}</a><br>
+        描述：{{record.desc}}
+      </p>
     </s-table>
     <save-form ref="saveModal" @ok="handleOk" />
   </a-card>
@@ -48,10 +53,11 @@
 
 <script>
 import { STable } from '@/components'
-import { getAUserList } from '@/api/manage'
+import { getAppVersionList } from '@/api/manage'
 import saveForm from './Form'
 
-const statusMap = {}
+let tipsMap = {}
+let clientMap = {}
 
 export default {
   components: {
@@ -69,17 +75,30 @@ export default {
           dataIndex: 'id'
         },
         {
-          title: '账号名',
-          dataIndex: 'username'
+          title: '版本名称',
+          dataIndex: 'name'
         },
         {
-          title: '昵称',
-          dataIndex: 'nickname'
+          title: '强更版本',
+          dataIndex: 'code'
         },
         {
-          title: '状态',
-          dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
+          title: '安装包大小',
+          dataIndex: 'size'
+        },
+        {
+          title: '客户端类型',
+          dataIndex: 'client',
+          scopedSlots: { customRender: 'client' }
+        },
+        {
+          title: '是否提示',
+          dataIndex: 'is_tips',
+          scopedSlots: { customRender: 'is_tips' }
+        },
+        {
+          title: '时间',
+          dataIndex: 'updated_at'
         },
         {
           title: '操作',
@@ -89,16 +108,11 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getAUserList(Object.assign(parameter, this.queryParam))
+        return getAppVersionList(Object.assign(parameter, this.queryParam))
           .then(res => {
             if (res.code === 200) {
-              this.statusLists = res.data.status_lists
-              for (const i in this.statusLists) {
-                statusMap[this.statusLists[i].key] = {
-                  status: this.statusLists[i].key <= 0 ? 'error' : 'success',
-                  text: this.statusLists[i].value
-                }
-              }
+              tipsMap = res.data.tips_lists
+              clientMap = res.data.client_lists
               const result = res.data.lists
               return {
                 data: result.data,
@@ -113,19 +127,49 @@ export default {
     }
   },
   filters: {
-    statusFilter (type) {
-      return statusMap[type].text
+    tipsTextFilter (key) {
+      let text = ''
+      for (const i in tipsMap) {
+        if (key === tipsMap[i].key) {
+          text = tipsMap[i].text
+        }
+      }
+      return text
     },
-    statusTypeFilter (type) {
-      return statusMap[type].status
+    tipsStatusFilter (key) {
+      let status = ''
+      for (const i in tipsMap) {
+        if (key === tipsMap[i].key) {
+          status = tipsMap[i].status
+        }
+      }
+      return status
+    },
+    clientStatusFilter (key) {
+      let status = ''
+      for (const i in clientMap) {
+        if (key === clientMap[i].key) {
+          status = clientMap[i].status
+        }
+      }
+      return status
+    },
+    clientTextFilter (key) {
+      let status = ''
+      for (const i in clientMap) {
+        if (key === clientMap[i].key) {
+          status = clientMap[i].text
+        }
+      }
+      return status
     }
   },
   methods: {
     handleCreate () {
-      this.$refs.saveModal.add(this.statusLists)
+      this.$refs.saveModal.add(tipsMap, clientMap)
     },
     handleEdit (record) {
-      this.$refs.saveModal.edit(record, this.statusLists)
+      this.$refs.saveModal.edit(record, tipsMap, clientMap)
     },
     handleOk () {
       this.$refs.table.refresh()

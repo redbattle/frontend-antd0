@@ -3,12 +3,12 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-          <a-col :md="8" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="账号名">
               <a-input v-model="queryParam.username" placeholder="手机号或邮箱"/>
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="状态">
               <a-select v-model="queryParam.status" placeholder="请选择" default-value="">
                 <a-select-option value="">全部</a-select-option>
@@ -31,9 +31,6 @@
       :columns="columns"
       :data="loadData"
     >
-      <span slot="serial" slot-scope="text, record, index">
-        {{ index + 1 }}
-      </span>
       <span slot="status" slot-scope="text">
         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
       </span>
@@ -63,10 +60,6 @@ export default {
       statusLists: {},
       // 表头
       columns: [
-        {
-          title: '#',
-          scopedSlots: { customRender: 'serial' }
-        },
         {
           title: 'ID',
           dataIndex: 'id'

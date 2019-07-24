@@ -11,8 +11,11 @@ const api = {
   get_info: url + '/a_user/info',
   a_user_list: url + '/a_user/list',
   a_user_save: url + '/a_user/save',
+  a_user_upload_app: url + '/a_user/upload_app',
   c_user_list: url + '/c_user/list',
   c_user_save: url + '/c_user/update',
+  app_version_list: url + '/app_version/list',
+  app_version_save: url + '/app_version/save',
   login: url + '/login',
   logout: url + '/a_user/logout'
 }
@@ -52,4 +55,16 @@ export function getCUserList (parameter) {
 
 export function getCUserSave (parameter) {
   return axiosPost(api.c_user_save, parameter)
+}
+
+export function getAppVersionList (parameter) {
+  return axiosPost(api.app_version_list, parameter)
+}
+
+export function getAppVersionSave (parameter) {
+  return axiosPost(api.app_version_save, parameter)
+}
+
+export function uploadAppFile (parameter) {
+  return axiosPost(api.a_user_upload_app, parameter)
 }

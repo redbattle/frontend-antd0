@@ -47,8 +47,23 @@ export const asyncRouterMap = [
             meta: { title: '列表' }
           }
         ]
-      }
+      },
 
+      {
+        path: '/app_version',
+        name: 'app_version',
+        component: PageView,
+        redirect: '/app_version/list',
+        meta: { title: '用户', icon: 'bars' },
+        children: [
+          {
+            path: '/app_version/list',
+            name: 'app_version_list',
+            component: () => import('@/views/app_version/List'),
+            meta: { title: '列表' }
+          }
+        ]
+      }
     ]
   },
   {
