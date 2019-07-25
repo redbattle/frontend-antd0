@@ -9,8 +9,11 @@
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
-            <a-form-item label="强更版本">
-              <a-input v-model="queryParam.code" placeholder="强更版本"/>
+            <a-form-item label="客户端">
+              <a-select v-model="queryParam.client" placeholder="请选择" default-value="">
+                <a-select-option value="">全部</a-select-option>
+                <a-select-option v-for="(item, key) in clientMap" :key="key" :value="item.key">{{ item.text }}</a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="24" :sm="24">
@@ -72,7 +75,7 @@ export default {
   data () {
     return {
       queryParam: {},
-      statusLists: {},
+      clientMap: {},
       // 表头
       columns: [
         {
@@ -117,7 +120,7 @@ export default {
           .then(res => {
             if (res.code === 200) {
               tipsMap = res.data.tips_lists
-              clientMap = res.data.client_lists
+              this.clientMap = clientMap = res.data.client_lists
               const result = res.data.lists
               return {
                 data: result.data,

@@ -12,7 +12,7 @@
             <a-form-item label="状态">
               <a-select v-model="queryParam.status" placeholder="请选择" default-value="">
                 <a-select-option value="">全部</a-select-option>
-                <a-select-option v-for="(item, key) in statusMap" :key="key" :value="item.key">{{ item.value }}</a-select-option>
+                <a-select-option v-for="(item, key) in statusMap" :key="key" :value="item.key">{{ item.text }}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -58,6 +58,7 @@ export default {
   data () {
     return {
       queryParam: {},
+      statusMap: {},
       // 表头
       columns: [
         {
@@ -93,7 +94,7 @@ export default {
         return getCUserList(Object.assign(parameter, this.queryParam))
           .then(res => {
             if (res.code === 200) {
-              statusMap = res.data.status_lists
+              this.statusMap = statusMap = res.data.status_lists
               const result = res.data.lists
               return {
                 data: result.data,
