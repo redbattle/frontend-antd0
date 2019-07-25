@@ -54,7 +54,7 @@ export const asyncRouterMap = [
         name: 'app_version',
         component: PageView,
         redirect: '/app_version/list',
-        meta: { title: '用户', icon: 'bars' },
+        meta: { title: 'APP版本', icon: 'bars' },
         children: [
           {
             path: '/app_version/list',
