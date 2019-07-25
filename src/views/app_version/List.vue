@@ -15,7 +15,8 @@
           </a-col>
           <a-col :md="24" :sm="24">
             <span class="table-page-search-submitButtons" :style="{ float: 'left'}">
-              <a-button type="primary" icon="plus" @click="handleCreate()">新建</a-button>
+              <a-button type="primary" icon="plus" @click="handleCreate()">新建iOS</a-button>
+              <a-button style="margin-left: 8px" type="primary" icon="plus" @click="handleCreateAndroid()">新建Android</a-button>
             </span>
             <span class="table-page-search-submitButtons" :style="{ float: 'right', overflow: 'hidden' }">
               <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
@@ -37,17 +38,18 @@
       </span>
       <span slot="client" slot-scope="key">
         <a-icon :type="key | clientStatusFilter"/>
-        {{key | clientTextFilter}}
+        {{ key | clientTextFilter }}
       </span>
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
       </span>
       <p slot="expandedRowRender" slot-scope="record" style="margin: 0">
-        安装包：<a :href="record.link">{{record.link}}</a><br>
-        描述：{{record.desc}}
+        安装：<a :href="record.link">{{ record.file_name || record.link }}</a><br>
+        描述：{{ record.desc }}
       </p>
     </s-table>
     <save-form ref="saveModal" @ok="handleOk" />
+    <save-form-android ref="saveModalAndroid" @ok="handleOk" />
   </a-card>
 </template>
 
@@ -55,6 +57,7 @@
 import { STable } from '@/components'
 import { getAppVersionList } from '@/api/manage'
 import saveForm from './Form'
+import saveFormAndroid from './FormAndroid'
 import { tableTextFilter, tableStatusFilter } from '@/utils/filter'
 
 let tipsMap = {}
@@ -63,6 +66,7 @@ let clientMap = {}
 export default {
   components: {
     saveForm,
+    saveFormAndroid,
     STable
   },
   data () {
@@ -85,7 +89,7 @@ export default {
         },
         {
           title: '安装包大小',
-          dataIndex: 'size'
+          dataIndex: 'file_size'
         },
         {
           title: '客户端类型',
@@ -145,8 +149,15 @@ export default {
     handleCreate () {
       this.$refs.saveModal.add(tipsMap, clientMap)
     },
+    handleCreateAndroid () {
+      this.$refs.saveModalAndroid.add(tipsMap, clientMap)
+    },
     handleEdit (record) {
-      this.$refs.saveModal.edit(record, tipsMap, clientMap)
+      if (record.client === 'android') {
+        this.$refs.saveModalAndroid.edit(record, tipsMap, clientMap)
+      } else {
+        this.$refs.saveModal.edit(record, tipsMap, clientMap)
+      }
     },
     handleOk () {
       this.$refs.table.refresh()

@@ -28,6 +28,8 @@ function axiosPost (url, params = {}) {
   })
 }
 
+export const urlUploadApp = api.a_user_upload_app
+
 export function getAUserList (parameter) {
   return axiosPost(api.a_user_list, parameter)
 }
@@ -63,8 +65,4 @@ export function getAppVersionList (parameter) {
 
 export function getAppVersionSave (parameter) {
   return axiosPost(api.app_version_save, parameter)
-}
-
-export function uploadAppFile (parameter) {
-  return axiosPost(api.a_user_upload_app, parameter)
 }
